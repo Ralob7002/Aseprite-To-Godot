@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://cf6lhf3isrfrb"]
+
+[ext_resource type="Script" uid="uid://3i10b6nieure" path="res://addons/AsepriteToGodot/scripts/dock_property/dock_property.gd" id="1_0vcxd"]
+[ext_resource type="Script" uid="uid://c3g3sybrxjxin" path="res://addons/AsepriteToGodot/scripts/dock_property/types/file_type.gd" id="2_3ou3i"]
+[ext_resource type="Script" uid="uid://dvfdqg4ya4xl4" path="res://addons/AsepriteToGodot/scripts/dock_property/types/item_list_type.gd" id="4_g7xir"]
+
+[sub_resource type="Theme" id="Theme_g7xir"]
+
+[node name="DockProperty" type="HBoxContainer"]
+offset_right = 215.0
+offset_bottom = 31.0
+script = ExtResource("1_0vcxd")
+
+[node name="PropertyTypes" type="Node" parent="."]
+
+[node name="FileType" type="Node" parent="PropertyTypes"]
+script = ExtResource("2_3ou3i")
+
+[node name="ItemListType" type="Node" parent="PropertyTypes"]
+script = ExtResource("4_g7xir")
+
+[node name="PropertyName" type="Label" parent="."]
+modulate = Color(1, 1, 1, 0.5)
+layout_mode = 2
+theme = SubResource("Theme_g7xir")
+text = "Dock Property"
+
+[connection signal="renamed" from="." to="." method="_on_renamed"]

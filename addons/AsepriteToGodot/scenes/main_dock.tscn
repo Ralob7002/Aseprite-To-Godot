@@ -1,0 +1,217 @@
+[gd_scene load_steps=18 format=3 uid="uid://cxl3j5ubdp7oq"]
+
+[ext_resource type="Script" uid="uid://b45kynfjesqil" path="res://addons/AsepriteToGodot/scripts/main_dock.gd" id="1_76csb"]
+[ext_resource type="Script" uid="uid://c3gotwn4e5kdc" path="res://addons/AsepriteToGodot/scripts/texture_importer.gd" id="2_xond4"]
+[ext_resource type="Script" uid="uid://c4q6k08khlvbo" path="res://addons/AsepriteToGodot/scripts/animation_importer.gd" id="3_083d2"]
+[ext_resource type="Script" uid="uid://bb7l8mp14fn1n" path="res://addons/AsepriteToGodot/scripts/dock_preview.gd" id="4_7t57m"]
+[ext_resource type="Texture2D" uid="uid://b7157ql15axik" path="res://addons/AsepriteToGodot/icons/Load.svg" id="5_03eo2"]
+[ext_resource type="Texture2D" uid="uid://bphh8v6c0kt1s" path="res://addons/AsepriteToGodot/icons/Clear.svg" id="6_asxyn"]
+[ext_resource type="PackedScene" uid="uid://cf6lhf3isrfrb" path="res://addons/AsepriteToGodot/scenes/dock_property.tscn" id="7_78w5t"]
+[ext_resource type="Texture2D" uid="uid://5tt877hohwvw" path="res://addons/AsepriteToGodot/icons/Sprite2D.svg" id="8_b2c7s"]
+[ext_resource type="Texture2D" uid="uid://c4v6vjiwk541l" path="res://addons/AsepriteToGodot/icons/AnimatedSprite2D.svg" id="9_wi3qm"]
+[ext_resource type="Texture2D" uid="uid://do68u4xvm6whg" path="res://addons/AsepriteToGodot/icons/AtlasTexture.svg" id="10_lesjs"]
+[ext_resource type="Texture2D" uid="uid://cvlhjoafsguak" path="res://addons/AsepriteToGodot/icons/Stop.svg" id="11_u75ft"]
+[ext_resource type="Texture2D" uid="uid://bwtq6wrst8riq" path="res://addons/AsepriteToGodot/icons/Loop.svg" id="12_2tnby"]
+[ext_resource type="Texture2D" uid="uid://dw56xb4lw8pl6" path="res://addons/AsepriteToGodot/icons/PingPongLoop.svg" id="13_ss501"]
+[ext_resource type="Texture2D" uid="uid://pnqi86ya7m05" path="res://addons/AsepriteToGodot/icons/PlayBackwards.svg" id="14_5jyhe"]
+[ext_resource type="Texture2D" uid="uid://d3akkir5y4aoe" path="res://addons/AsepriteToGodot/icons/PlayStartBackwards.svg" id="15_1tqfy"]
+[ext_resource type="Texture2D" uid="uid://bc46bsvxjyx3f" path="res://addons/AsepriteToGodot/icons/PlayStart.svg" id="16_m383s"]
+[ext_resource type="Texture2D" uid="uid://dhns0xv2t7hms" path="res://addons/AsepriteToGodot/icons/Play.svg" id="17_u23bt"]
+
+[node name="MainDock" type="Control"]
+custom_minimum_size = Vector2(750, 180)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_76csb")
+
+[node name="TextureImporter" type="Node" parent="."]
+script = ExtResource("2_xond4")
+
+[node name="AnimationImporter" type="Node" parent="."]
+script = ExtResource("3_083d2")
+
+[node name="DockPreview" type="Node" parent="."]
+script = ExtResource("4_7t57m")
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+initial_position = 4
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+
+[node name="PopupMenu" type="PopupMenu" parent="."]
+size = Vector2i(77, 62)
+item_count = 2
+item_0/text = "Load"
+item_0/icon = ExtResource("5_03eo2")
+item_0/id = 0
+item_1/text = "Clear"
+item_1/icon = ExtResource("6_asxyn")
+item_1/id = 1
+
+[node name="DependenceWarning" type="AcceptDialog" parent="."]
+initial_position = 4
+transient_to_focused = true
+
+[node name="MainContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftMargin" type="MarginContainer" parent="MainContainer"]
+layout_mode = 2
+
+[node name="PropertiesBackground" type="Panel" parent="MainContainer/LeftMargin"]
+layout_mode = 2
+
+[node name="PropertiesMargin" type="MarginContainer" parent="MainContainer/LeftMargin"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 5
+
+[node name="Properties" type="VBoxContainer" parent="MainContainer/LeftMargin/PropertiesMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="AsepriteExportJson" parent="MainContainer/LeftMargin/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
+layout_mode = 2
+main_dock = NodePath("../../../../..")
+extension_filters = PackedStringArray("*.json")
+
+[node name="AnimationSpriteSheet" parent="MainContainer/LeftMargin/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
+layout_mode = 2
+main_dock = NodePath("../../../../..")
+extension_filters = PackedStringArray("*.svg", "*.png", "*.jpg", "*.jpeg")
+
+[node name="TextureNodeType" parent="MainContainer/LeftMargin/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
+layout_mode = 2
+type = 1
+main_dock = NodePath("../../../../..")
+item_list = PackedStringArray("Sprite2D", "AnimatedSprite2D")
+item_list_icons = [ExtResource("8_b2c7s"), ExtResource("9_wi3qm")]
+
+[node name="TextureRegionMode" parent="MainContainer/LeftMargin/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
+layout_mode = 2
+type = 1
+main_dock = NodePath("../../../../..")
+item_list = PackedStringArray("Sprite2D Region", "AtlasTexture Region")
+item_list_icons = [ExtResource("8_b2c7s"), ExtResource("10_lesjs")]
+
+[node name="AnimationLoopMode" parent="MainContainer/LeftMargin/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
+layout_mode = 2
+type = 1
+main_dock = NodePath("../../../../..")
+item_list = PackedStringArray("Loop None", "Loop Linear", "Loop PingPong")
+item_list_icons = [ExtResource("11_u75ft"), ExtResource("12_2tnby"), ExtResource("13_ss501")]
+
+[node name="RightContainer" type="VBoxContainer" parent="MainContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="UpMargin" type="MarginContainer" parent="MainContainer/RightContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 5
+
+[node name="UpContainer" type="HBoxContainer" parent="MainContainer/RightContainer/UpMargin"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.5)
+layout_mode = 2
+
+[node name="AnimationsActions" type="HBoxContainer" parent="MainContainer/RightContainer/UpMargin/UpContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PlayAnimationBackwards" type="Button" parent="MainContainer/RightContainer/UpMargin/UpContainer/AnimationsActions"]
+layout_mode = 2
+icon = ExtResource("14_5jyhe")
+flat = true
+
+[node name="PlayAnimationBackwardsEnd" type="Button" parent="MainContainer/RightContainer/UpMargin/UpContainer/AnimationsActions"]
+layout_mode = 2
+icon = ExtResource("15_1tqfy")
+flat = true
+
+[node name="StopAnimation" type="Button" parent="MainContainer/RightContainer/UpMargin/UpContainer/AnimationsActions"]
+layout_mode = 2
+icon = ExtResource("11_u75ft")
+flat = true
+
+[node name="PlayAnimationStart" type="Button" parent="MainContainer/RightContainer/UpMargin/UpContainer/AnimationsActions"]
+layout_mode = 2
+icon = ExtResource("16_m383s")
+flat = true
+
+[node name="PlayAnimation" type="Button" parent="MainContainer/RightContainer/UpMargin/UpContainer/AnimationsActions"]
+layout_mode = 2
+icon = ExtResource("17_u23bt")
+flat = true
+
+[node name="LeftVSeparator" type="VSeparator" parent="MainContainer/RightContainer/UpMargin/UpContainer"]
+layout_mode = 2
+
+[node name="Animation" parent="MainContainer/RightContainer/UpMargin/UpContainer" instance=ExtResource("7_78w5t")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+type = 1
+use_reset_button = false
+horizontal_expand_list = true
+clip_text = true
+shrink_end = false
+
+[node name="RightVSeparator" type="VSeparator" parent="MainContainer/RightContainer/UpMargin/UpContainer"]
+layout_mode = 2
+
+[node name="ImportButton" type="Button" parent="MainContainer/RightContainer/UpMargin/UpContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Import"
+
+[node name="PreviewMargin" type="MarginContainer" parent="MainContainer/RightContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 0
+
+[node name="PreviewBackground" type="Panel" parent="MainContainer/RightContainer/PreviewMargin"]
+layout_mode = 2
+
+[node name="PreviewContainer" type="SubViewportContainer" parent="MainContainer/RightContainer/PreviewMargin"]
+layout_mode = 2
+stretch = true
+
+[node name="AnimationPreview" type="SubViewport" parent="MainContainer/RightContainer/PreviewMargin/PreviewContainer"]
+unique_name_in_owner = true
+transparent_bg = true
+handle_input_locally = false
+snap_2d_vertices_to_pixel = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(2, 2)
+render_target_update_mode = 4
+
+[node name="PreviewNodes" type="Node2D" parent="MainContainer/RightContainer/PreviewMargin/PreviewContainer/AnimationPreview"]
+unique_name_in_owner = true
+
+[node name="PreviewCamera" type="Camera2D" parent="MainContainer/RightContainer/PreviewMargin/PreviewContainer/AnimationPreview/PreviewNodes"]
+unique_name_in_owner = true
+
+[node name="Sprites" type="Node2D" parent="MainContainer/RightContainer/PreviewMargin/PreviewContainer/AnimationPreview/PreviewNodes"]
+
+[node name="AnimationNodes" type="Node2D" parent="MainContainer/RightContainer/PreviewMargin/PreviewContainer/AnimationPreview/PreviewNodes"]
+
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
+[connection signal="value_changed" from="MainContainer/LeftMargin/PropertiesMargin/Properties/AsepriteExportJson" to="." method="_on_aseprite_export_json_value_changed"]
+[connection signal="pressed" from="MainContainer/RightContainer/UpMargin/UpContainer/ImportButton" to="." method="_on_import_button_pressed"]
+[connection signal="size_changed" from="MainContainer/RightContainer/PreviewMargin/PreviewContainer/AnimationPreview" to="DockPreview" method="_on_animation_preview_size_changed"]
