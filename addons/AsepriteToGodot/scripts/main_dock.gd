@@ -8,6 +8,9 @@ extends Control
 @onready var texture_importer: Node = $TextureImporter
 @onready var dependence_warning: AcceptDialog = $DependenceWarning
 @onready var animation_importer: Node = $AnimationImporter
+@onready var dock_preview: Node = $DockPreview
+@onready var preview_background: Panel = %PreviewBackground
+@onready var advanced_properties: VBoxContainer = %AdvancedProperties
 
 ## Variables.
 var json_file: JSON
@@ -43,9 +46,14 @@ func open_dependence_warning(dialog: String) -> void:
 
 # Returns the value of a given property.
 func get_property(property: String) -> Variant:
-	if not properties:
-		return null
-	return properties.get_node(property).value
+	if not properties or not advanced_properties: return null
+	
+	if properties.has_node(property):
+		return properties.get_node(property).value
+	elif advanced_properties.has_node(property):
+		return advanced_properties.get_node(property).value
+	
+	return false
 
 
 # Checks if the AsepriteExportJson was exported with the "Split Layers" option.
@@ -150,5 +158,9 @@ func _on_aseprite_export_json_value_changed(value: Variant) -> void:
 func _on_visibility_changed() -> void:
 	if is_visible_in_tree():
 		set_process(true)
+		if is_node_ready():
+			dock_preview.set_process(true)
 	else:
 		set_process(false)
+		if is_node_ready():
+			dock_preview.set_process(false)

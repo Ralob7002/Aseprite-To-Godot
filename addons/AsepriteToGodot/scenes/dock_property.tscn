@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cf6lhf3isrfrb"]
+[gd_scene load_steps=7 format=3 uid="uid://cf6lhf3isrfrb"]
 
 [ext_resource type="Script" uid="uid://3i10b6nieure" path="res://addons/AsepriteToGodot/scripts/dock_property/dock_property.gd" id="1_0vcxd"]
 [ext_resource type="Script" uid="uid://c3g3sybrxjxin" path="res://addons/AsepriteToGodot/scripts/dock_property/types/file_type.gd" id="2_3ou3i"]
+[ext_resource type="Script" uid="uid://c0daur6k25i1l" path="res://addons/AsepriteToGodot/scripts/dock_property/types/color_picker_type.gd" id="4_8pbwn"]
 [ext_resource type="Script" uid="uid://dvfdqg4ya4xl4" path="res://addons/AsepriteToGodot/scripts/dock_property/types/item_list_type.gd" id="4_g7xir"]
+[ext_resource type="Script" uid="uid://crwvhlqahgtaj" path="res://addons/AsepriteToGodot/scripts/dock_property/types/check_box_type.gd" id="5_vy7hp"]
 
 [sub_resource type="Theme" id="Theme_g7xir"]
 
@@ -18,6 +20,12 @@ script = ExtResource("2_3ou3i")
 
 [node name="ItemListType" type="Node" parent="PropertyTypes"]
 script = ExtResource("4_g7xir")
+
+[node name="ColorPickerType" type="Node" parent="PropertyTypes"]
+script = ExtResource("4_8pbwn")
+
+[node name="CheckBoxType" type="Node" parent="PropertyTypes"]
+script = ExtResource("5_vy7hp")
 
 [node name="PropertyName" type="Label" parent="."]
 modulate = Color(1, 1, 1, 0.5)

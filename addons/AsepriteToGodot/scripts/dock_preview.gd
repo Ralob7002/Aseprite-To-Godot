@@ -12,9 +12,11 @@ extends Node
 @onready var current_animation: HBoxContainer = %Animation
 @onready var animations_actions: HBoxContainer = %AnimationsActions
 @onready var up_container: HBoxContainer = %UpContainer
+@onready var animation_progress: ProgressBar = %AnimationProgress
 
 ## Variables.
 var animation_node_is_playing: bool = false
+var auto_update_camera: bool = true
 
 
 func _ready() -> void:
@@ -38,9 +40,14 @@ func _ready() -> void:
 	animations_actions.get_node("PlayAnimationStart").pressed.connect(_on_play_animation_start_pressed)
 
 
+func _process(delta: float) -> void:
+	update_animation_progress()
+
+
 # Update the zoom of the PreviewCamera.
-func update_preview_camera_zoom() -> void:
+func update_preview_camera_zoom(ignore_auto_update: bool = false) -> void:
 	if not animation_preview: return
+	if not auto_update_camera and not ignore_auto_update: return
 	
 	# Dependencies.
 	var texture_node_type: Variant = main_dock.get_property("TextureNodeType")
@@ -48,6 +55,9 @@ func update_preview_camera_zoom() -> void:
 		if not preview_nodes.get_node("AnimationNodes").get_child_count(): return
 	else: # Sprite2D.
 		if preview_nodes.get_node("Sprites").get_child_count() == 0: return
+	
+	# Set PreviewCamera position.
+	preview_camera.position = Vector2.ZERO
 	
 	# Define the size of the sprite for the texture node.
 	var sprite_size: Vector2
@@ -152,12 +162,16 @@ func stop_animation_node() -> void:
 	if current_animation and preview_nodes.get_node("AnimationNodes").get_child(0) is AnimationPlayer:
 		var animation_player: AnimationPlayer = preview_nodes.get_node("AnimationNodes/AnimationPlayer")
 		if animation_player.is_playing(): animation_player.pause()
-		else: animation_player.stop()
+		else: 
+			animation_player.stop()
+			animation_progress.value = 0
 	# AnimatedSprite2D.
 	elif current_animation and preview_nodes.get_node("AnimationNodes").get_child(0) is AnimatedSprite2D:
 		for animated_sprite in preview_nodes.get_node("AnimationNodes").get_children():
 			if animated_sprite.is_playing(): animated_sprite.pause()
-			else: animated_sprite.stop()
+			else: 
+				animated_sprite.stop()
+				animation_progress.value = 0
 
 
 # Delete the texture_nodes.
@@ -177,6 +191,24 @@ func change_up_container(enabled: bool) -> void:
 	var alpha: float = 0.5
 	if enabled: alpha = 1.0
 	up_container.modulate.a = alpha
+	animation_progress.visible = enabled
+	if not enabled: animation_progress.value = 0
+
+
+# Updates the AnimationProgress.
+func update_animation_progress() -> void:
+	if preview_nodes.get_node("AnimationNodes").get_child_count():
+		var animation_node: Variant = preview_nodes.get_node("AnimationNodes").get_child(0)
+		if animation_node is AnimationPlayer:
+			if not animation_node.current_animation: return
+			animation_progress.max_value = animation_node.current_animation_length
+			animation_progress.value = animation_node.current_animation_position
+		
+		elif animation_node is AnimatedSprite2D:
+			if not animation_node.animation: return
+			var animation: String = animation_node.animation
+			animation_progress.max_value = animation_node.sprite_frames.get_frame_count(animation) - 1
+			animation_progress.value = animation_node.frame - (1 - animation_node.frame_progress)
 
 
 ## Signals.
@@ -196,6 +228,7 @@ func _on_property_value_changed(value: Variant) -> void:
 		current_animation.item_list_icons = []
 		current_animation.item_list = []
 		change_up_container(false)
+		auto_update_camera = true
 		return
 	
 	if not main_dock.get_property("AnimationSpriteSheet"):
@@ -203,6 +236,7 @@ func _on_property_value_changed(value: Variant) -> void:
 		current_animation.item_list_icons = []
 		current_animation.item_list = []
 		change_up_container(false)
+		auto_update_camera = true
 		return
 	
 	# Activates the top container.

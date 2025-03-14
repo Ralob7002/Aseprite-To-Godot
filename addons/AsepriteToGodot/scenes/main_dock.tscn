@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cxl3j5ubdp7oq"]
+[gd_scene load_steps=25 format=3 uid="uid://cxl3j5ubdp7oq"]
 
 [ext_resource type="Script" uid="uid://b45kynfjesqil" path="res://addons/AsepriteToGodot/scripts/main_dock.gd" id="1_76csb"]
 [ext_resource type="Script" uid="uid://c3gotwn4e5kdc" path="res://addons/AsepriteToGodot/scripts/texture_importer.gd" id="2_xond4"]
@@ -17,15 +17,28 @@
 [ext_resource type="Texture2D" uid="uid://d3akkir5y4aoe" path="res://addons/AsepriteToGodot/icons/PlayStartBackwards.svg" id="15_1tqfy"]
 [ext_resource type="Texture2D" uid="uid://bc46bsvxjyx3f" path="res://addons/AsepriteToGodot/icons/PlayStart.svg" id="16_m383s"]
 [ext_resource type="Texture2D" uid="uid://dhns0xv2t7hms" path="res://addons/AsepriteToGodot/icons/Play.svg" id="17_u23bt"]
+[ext_resource type="Script" uid="uid://b6n3wvo0y260u" path="res://addons/AsepriteToGodot/scripts/preview_input.gd" id="18_1gtmb"]
+[ext_resource type="Texture2D" uid="uid://b8kutx3ttuu31" path="res://addons/AsepriteToGodot/icons/CenterView.svg" id="19_1gtmb"]
+[ext_resource type="Texture2D" uid="uid://dhnssm0rs5w55" path="res://addons/AsepriteToGodot/icons/Lock.svg" id="20_dbnn3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dbnn3"]
+
+[sub_resource type="FontVariation" id="FontVariation_lyqla"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lyqla"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lyqla"]
+bg_color = Color(1, 1, 1, 0.5)
 
 [node name="MainDock" type="Control"]
-custom_minimum_size = Vector2(750, 180)
+custom_minimum_size = Vector2(750, 220)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("1_76csb")
 
 [node name="TextureImporter" type="Node" parent="."]
@@ -35,6 +48,7 @@ script = ExtResource("2_xond4")
 script = ExtResource("3_083d2")
 
 [node name="DockPreview" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("4_7t57m")
 
 [node name="FileDialog" type="FileDialog" parent="."]
@@ -58,7 +72,7 @@ item_1/id = 1
 initial_position = 4
 transient_to_focused = true
 
-[node name="MainContainer" type="HBoxContainer" parent="."]
+[node name="MainMargin" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -66,102 +80,135 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LeftMargin" type="MarginContainer" parent="MainContainer"]
+[node name="MainContainer" type="HBoxContainer" parent="MainMargin"]
 layout_mode = 2
 
-[node name="PropertiesBackground" type="Panel" parent="MainContainer/LeftMargin"]
+[node name="TabContainer" type="TabContainer" parent="MainMargin/MainContainer"]
+layout_mode = 2
+theme_override_styles/tabbar_background = SubResource("StyleBoxEmpty_dbnn3")
+current_tab = 0
+tab_focus_mode = 0
+
+[node name="Properties" type="MarginContainer" parent="MainMargin/MainContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="PropertiesBackground" type="Panel" parent="MainMargin/MainContainer/TabContainer/Properties"]
 layout_mode = 2
 
-[node name="PropertiesMargin" type="MarginContainer" parent="MainContainer/LeftMargin"]
+[node name="PropertiesMargin" type="MarginContainer" parent="MainMargin/MainContainer/TabContainer/Properties"]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 5
 
-[node name="Properties" type="VBoxContainer" parent="MainContainer/LeftMargin/PropertiesMargin"]
+[node name="Properties" type="VBoxContainer" parent="MainMargin/MainContainer/TabContainer/Properties/PropertiesMargin"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="AsepriteExportJson" parent="MainContainer/LeftMargin/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
+[node name="AsepriteExportJson" parent="MainMargin/MainContainer/TabContainer/Properties/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
 layout_mode = 2
-main_dock = NodePath("../../../../..")
+main_dock = NodePath("../../../../../../..")
 extension_filters = PackedStringArray("*.json")
 
-[node name="AnimationSpriteSheet" parent="MainContainer/LeftMargin/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
+[node name="AnimationSpriteSheet" parent="MainMargin/MainContainer/TabContainer/Properties/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
 layout_mode = 2
-main_dock = NodePath("../../../../..")
+main_dock = NodePath("../../../../../../..")
 extension_filters = PackedStringArray("*.svg", "*.png", "*.jpg", "*.jpeg")
 
-[node name="TextureNodeType" parent="MainContainer/LeftMargin/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
+[node name="TextureNodeType" parent="MainMargin/MainContainer/TabContainer/Properties/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
 layout_mode = 2
 type = 1
-main_dock = NodePath("../../../../..")
+main_dock = NodePath("../../../../../../..")
 item_list = PackedStringArray("Sprite2D", "AnimatedSprite2D")
 item_list_icons = [ExtResource("8_b2c7s"), ExtResource("9_wi3qm")]
 
-[node name="TextureRegionMode" parent="MainContainer/LeftMargin/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
+[node name="TextureRegionMode" parent="MainMargin/MainContainer/TabContainer/Properties/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
 layout_mode = 2
 type = 1
-main_dock = NodePath("../../../../..")
+main_dock = NodePath("../../../../../../..")
 item_list = PackedStringArray("Sprite2D Region", "AtlasTexture Region")
 item_list_icons = [ExtResource("8_b2c7s"), ExtResource("10_lesjs")]
 
-[node name="AnimationLoopMode" parent="MainContainer/LeftMargin/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
+[node name="AnimationLoopMode" parent="MainMargin/MainContainer/TabContainer/Properties/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
 layout_mode = 2
 type = 1
-main_dock = NodePath("../../../../..")
+main_dock = NodePath("../../../../../../..")
 item_list = PackedStringArray("Loop None", "Loop Linear", "Loop PingPong")
 item_list_icons = [ExtResource("11_u75ft"), ExtResource("12_2tnby"), ExtResource("13_ss501")]
 
-[node name="RightContainer" type="VBoxContainer" parent="MainContainer"]
+[node name="Advanced" type="MarginContainer" parent="MainMargin/MainContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="AdvancedBackground" type="Panel" parent="MainMargin/MainContainer/TabContainer/Advanced"]
+layout_mode = 2
+
+[node name="AdvancedPropertiesMargin" type="MarginContainer" parent="MainMargin/MainContainer/TabContainer/Advanced"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 5
+
+[node name="AdvancedProperties" type="VBoxContainer" parent="MainMargin/MainContainer/TabContainer/Advanced/AdvancedPropertiesMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PreviewBackgroundColor" parent="MainMargin/MainContainer/TabContainer/Advanced/AdvancedPropertiesMargin/AdvancedProperties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
+layout_mode = 2
+type = 2
+main_dock = NodePath("../../../../../../..")
+
+[node name="RightContainer" type="VBoxContainer" parent="MainMargin/MainContainer"]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="UpMargin" type="MarginContainer" parent="MainContainer/RightContainer"]
+[node name="UpMargin" type="MarginContainer" parent="MainMargin/MainContainer/RightContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 5
 
-[node name="UpContainer" type="HBoxContainer" parent="MainContainer/RightContainer/UpMargin"]
+[node name="UpContainer" type="HBoxContainer" parent="MainMargin/MainContainer/RightContainer/UpMargin"]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0.5)
 layout_mode = 2
 
-[node name="AnimationsActions" type="HBoxContainer" parent="MainContainer/RightContainer/UpMargin/UpContainer"]
+[node name="AnimationsActions" type="HBoxContainer" parent="MainMargin/MainContainer/RightContainer/UpMargin/UpContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="PlayAnimationBackwards" type="Button" parent="MainContainer/RightContainer/UpMargin/UpContainer/AnimationsActions"]
+[node name="PlayAnimationBackwards" type="Button" parent="MainMargin/MainContainer/RightContainer/UpMargin/UpContainer/AnimationsActions"]
 layout_mode = 2
 icon = ExtResource("14_5jyhe")
 flat = true
 
-[node name="PlayAnimationBackwardsEnd" type="Button" parent="MainContainer/RightContainer/UpMargin/UpContainer/AnimationsActions"]
+[node name="PlayAnimationBackwardsEnd" type="Button" parent="MainMargin/MainContainer/RightContainer/UpMargin/UpContainer/AnimationsActions"]
 layout_mode = 2
 icon = ExtResource("15_1tqfy")
 flat = true
 
-[node name="StopAnimation" type="Button" parent="MainContainer/RightContainer/UpMargin/UpContainer/AnimationsActions"]
+[node name="StopAnimation" type="Button" parent="MainMargin/MainContainer/RightContainer/UpMargin/UpContainer/AnimationsActions"]
 layout_mode = 2
 icon = ExtResource("11_u75ft")
 flat = true
 
-[node name="PlayAnimationStart" type="Button" parent="MainContainer/RightContainer/UpMargin/UpContainer/AnimationsActions"]
+[node name="PlayAnimationStart" type="Button" parent="MainMargin/MainContainer/RightContainer/UpMargin/UpContainer/AnimationsActions"]
 layout_mode = 2
 icon = ExtResource("16_m383s")
 flat = true
 
-[node name="PlayAnimation" type="Button" parent="MainContainer/RightContainer/UpMargin/UpContainer/AnimationsActions"]
+[node name="PlayAnimation" type="Button" parent="MainMargin/MainContainer/RightContainer/UpMargin/UpContainer/AnimationsActions"]
 layout_mode = 2
 icon = ExtResource("17_u23bt")
 flat = true
 
-[node name="LeftVSeparator" type="VSeparator" parent="MainContainer/RightContainer/UpMargin/UpContainer"]
+[node name="LeftVSeparator" type="VSeparator" parent="MainMargin/MainContainer/RightContainer/UpMargin/UpContainer"]
 layout_mode = 2
 
-[node name="Animation" parent="MainContainer/RightContainer/UpMargin/UpContainer" instance=ExtResource("7_78w5t")]
+[node name="Animation" parent="MainMargin/MainContainer/RightContainer/UpMargin/UpContainer" instance=ExtResource("7_78w5t")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -171,47 +218,92 @@ horizontal_expand_list = true
 clip_text = true
 shrink_end = false
 
-[node name="RightVSeparator" type="VSeparator" parent="MainContainer/RightContainer/UpMargin/UpContainer"]
+[node name="RightVSeparator" type="VSeparator" parent="MainMargin/MainContainer/RightContainer/UpMargin/UpContainer"]
 layout_mode = 2
 
-[node name="ImportButton" type="Button" parent="MainContainer/RightContainer/UpMargin/UpContainer"]
+[node name="ImportButton" type="Button" parent="MainMargin/MainContainer/RightContainer/UpMargin/UpContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_lyqla")
 text = "Import"
 
-[node name="PreviewMargin" type="MarginContainer" parent="MainContainer/RightContainer"]
+[node name="AnimationProgressMargin" type="MarginContainer" parent="MainMargin/MainContainer/RightContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 13
+theme_override_constants/margin_top = 3
+
+[node name="AnimationProgress" type="ProgressBar" parent="MainMargin/MainContainer/RightContainer/AnimationProgressMargin"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxEmpty_lyqla")
+theme_override_styles/fill = SubResource("StyleBoxFlat_lyqla")
+value = 50.0
+show_percentage = false
+
+[node name="PreviewMargin" type="MarginContainer" parent="MainMargin/MainContainer/RightContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_right = 0
 
-[node name="PreviewBackground" type="Panel" parent="MainContainer/RightContainer/PreviewMargin"]
+[node name="PreviewBackground" type="Panel" parent="MainMargin/MainContainer/RightContainer/PreviewMargin"]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="PreviewContainer" type="SubViewportContainer" parent="MainContainer/RightContainer/PreviewMargin"]
+[node name="PreviewContainer" type="SubViewportContainer" parent="MainMargin/MainContainer/RightContainer/PreviewMargin"]
 layout_mode = 2
 stretch = true
 
-[node name="AnimationPreview" type="SubViewport" parent="MainContainer/RightContainer/PreviewMargin/PreviewContainer"]
+[node name="AnimationPreview" type="SubViewport" parent="MainMargin/MainContainer/RightContainer/PreviewMargin/PreviewContainer"]
 unique_name_in_owner = true
 transparent_bg = true
 handle_input_locally = false
 snap_2d_vertices_to_pixel = true
 canvas_item_default_texture_filter = 0
-size = Vector2i(2, 2)
+size = Vector2i(802, 606)
 render_target_update_mode = 4
 
-[node name="PreviewNodes" type="Node2D" parent="MainContainer/RightContainer/PreviewMargin/PreviewContainer/AnimationPreview"]
+[node name="PreviewNodes" type="Node2D" parent="MainMargin/MainContainer/RightContainer/PreviewMargin/PreviewContainer/AnimationPreview"]
 unique_name_in_owner = true
 
-[node name="PreviewCamera" type="Camera2D" parent="MainContainer/RightContainer/PreviewMargin/PreviewContainer/AnimationPreview/PreviewNodes"]
+[node name="PreviewCamera" type="Camera2D" parent="MainMargin/MainContainer/RightContainer/PreviewMargin/PreviewContainer/AnimationPreview/PreviewNodes"]
 unique_name_in_owner = true
 
-[node name="Sprites" type="Node2D" parent="MainContainer/RightContainer/PreviewMargin/PreviewContainer/AnimationPreview/PreviewNodes"]
+[node name="Sprites" type="Node2D" parent="MainMargin/MainContainer/RightContainer/PreviewMargin/PreviewContainer/AnimationPreview/PreviewNodes"]
 
-[node name="AnimationNodes" type="Node2D" parent="MainContainer/RightContainer/PreviewMargin/PreviewContainer/AnimationPreview/PreviewNodes"]
+[node name="AnimationNodes" type="Node2D" parent="MainMargin/MainContainer/RightContainer/PreviewMargin/PreviewContainer/AnimationPreview/PreviewNodes"]
+
+[node name="PreviewInput" type="MarginContainer" parent="MainMargin/MainContainer/RightContainer/PreviewMargin"]
+clip_contents = true
+layout_mode = 2
+script = ExtResource("18_1gtmb")
+
+[node name="PreviewActionsContainer" type="HBoxContainer" parent="MainMargin/MainContainer/RightContainer/PreviewMargin/PreviewInput"]
+layout_mode = 2
+
+[node name="CenterViewButton" type="Button" parent="MainMargin/MainContainer/RightContainer/PreviewMargin/PreviewInput/PreviewActionsContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+focus_mode = 0
+icon = ExtResource("19_1gtmb")
+flat = true
+
+[node name="LockCentralizedCamera" type="Button" parent="MainMargin/MainContainer/RightContainer/PreviewMargin/PreviewInput/PreviewActionsContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+focus_mode = 0
+icon = ExtResource("20_dbnn3")
+flat = true
 
 [connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
-[connection signal="value_changed" from="MainContainer/LeftMargin/PropertiesMargin/Properties/AsepriteExportJson" to="." method="_on_aseprite_export_json_value_changed"]
-[connection signal="pressed" from="MainContainer/RightContainer/UpMargin/UpContainer/ImportButton" to="." method="_on_import_button_pressed"]
-[connection signal="size_changed" from="MainContainer/RightContainer/PreviewMargin/PreviewContainer/AnimationPreview" to="DockPreview" method="_on_animation_preview_size_changed"]
+[connection signal="value_changed" from="MainMargin/MainContainer/TabContainer/Properties/PropertiesMargin/Properties/AsepriteExportJson" to="." method="_on_aseprite_export_json_value_changed"]
+[connection signal="value_changed" from="MainMargin/MainContainer/TabContainer/Properties/PropertiesMargin/Properties/AsepriteExportJson" to="MainMargin/MainContainer/RightContainer/PreviewMargin/PreviewInput" method="_on_dependent_property_value_changed"]
+[connection signal="value_changed" from="MainMargin/MainContainer/TabContainer/Properties/PropertiesMargin/Properties/AnimationSpriteSheet" to="MainMargin/MainContainer/RightContainer/PreviewMargin/PreviewInput" method="_on_dependent_property_value_changed"]
+[connection signal="pressed" from="MainMargin/MainContainer/RightContainer/UpMargin/UpContainer/ImportButton" to="." method="_on_import_button_pressed"]
+[connection signal="size_changed" from="MainMargin/MainContainer/RightContainer/PreviewMargin/PreviewContainer/AnimationPreview" to="DockPreview" method="_on_animation_preview_size_changed"]
+[connection signal="pressed" from="MainMargin/MainContainer/RightContainer/PreviewMargin/PreviewInput/PreviewActionsContainer/CenterViewButton" to="MainMargin/MainContainer/RightContainer/PreviewMargin/PreviewInput" method="_on_center_view_button_pressed"]
+[connection signal="pressed" from="MainMargin/MainContainer/RightContainer/PreviewMargin/PreviewInput/PreviewActionsContainer/LockCentralizedCamera" to="MainMargin/MainContainer/RightContainer/PreviewMargin/PreviewInput" method="_on_lock_centralized_camera_pressed"]

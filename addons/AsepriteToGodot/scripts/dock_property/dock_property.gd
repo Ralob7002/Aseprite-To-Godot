@@ -6,7 +6,7 @@ signal value_changed(value: Variant)
 signal reload_button_pressed
 
 ## Enums.
-enum PROPERTY_TYPE {FILE, ITEMLIST}
+enum PROPERTY_TYPE {FILE, ITEMLIST, COLOR_PICKER, CHECK_BOX}
 
 ## References.
 @onready var property_name: Label = $PropertyName
@@ -71,6 +71,10 @@ func change_type() -> void:
 			current_type = property_types.get_node("FileType")
 		PROPERTY_TYPE.ITEMLIST:
 			current_type = property_types.get_node("ItemListType")
+		PROPERTY_TYPE.COLOR_PICKER:
+			current_type = property_types.get_node("ColorPickerType")
+		PROPERTY_TYPE.CHECK_BOX:
+			current_type = property_types.get_node("CheckBoxType")
 	
 	# Enter the new current type.
 	if current_type: current_type.enter()
