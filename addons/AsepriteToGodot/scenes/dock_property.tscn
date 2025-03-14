@@ -12,6 +12,10 @@
 offset_right = 215.0
 offset_bottom = 31.0
 script = ExtResource("1_0vcxd")
+popup_size = null
+
+[node name="PropertyTimer" type="Timer" parent="."]
+one_shot = true
 
 [node name="PropertyTypes" type="Node" parent="."]
 
@@ -33,4 +37,7 @@ layout_mode = 2
 theme = SubResource("Theme_g7xir")
 text = "Dock Property"
 
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
 [connection signal="renamed" from="." to="." method="_on_renamed"]
+[connection signal="timeout" from="PropertyTimer" to="." method="_on_property_timer_timeout"]

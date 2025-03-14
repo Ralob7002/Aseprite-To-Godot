@@ -11,6 +11,9 @@ extends Control
 @onready var dock_preview: Node = $DockPreview
 @onready var preview_background: Panel = %PreviewBackground
 @onready var advanced_properties: VBoxContainer = %AdvancedProperties
+@onready var property_popup: PopupPanel = $PropertyPopup
+@onready var property_popup_label: RichTextLabel = %PropertyPopupLabel
+@onready var property_popup_title: RichTextLabel = %PropertyPopupTitle
 
 ## Variables.
 var json_file: JSON
@@ -111,6 +114,44 @@ func get_icon(icon: String) -> CompressedTexture2D:
 	return load("res://addons/AsepriteToGodot/icons/" + icon + ".svg")
 
 
+func open_property_popup(title: String, text: String, popup_size: Vector2) -> void:
+	# Set title.
+	property_popup_title.text = set_text_colors(title)
+	# Set text.
+	property_popup_label.text = set_text_colors(text)
+	
+	property_popup.size = popup_size
+	property_popup.visible = true
+	property_popup.position = get_global_mouse_position() + Vector2(get_window().position) + Vector2(10, -property_popup.size.y - 10)
+	
+	var popup_rect: Rect2 = Rect2(property_popup.position, property_popup.size)
+	var window_rect: Rect2 = Rect2(get_window().position, get_window().size - Vector2i(20, 20))
+	
+	var fixed_position: Vector2 = property_popup.position
+	fixed_position.x = clamp(
+		fixed_position.x, window_rect.position.x, 
+		window_rect.end.x - property_popup.size.x
+	)
+	fixed_position.y = clamp(
+		fixed_position.y, window_rect.position.y, 
+		window_rect.end.y - property_popup.size.y
+	)
+	property_popup.position = fixed_position
+
+
+func set_text_colors(text: String) -> String:
+	var settings: EditorSettings = EditorInterface.get_editor_settings()
+	CodeHighlighter
+	text = text.replace("accent_color", color_to_hex(settings.get_setting("interface/theme/accent_color")))
+	text = text.replace("engine_type_color", color_to_hex(settings.get_setting("text_editor/theme/highlighting/engine_type_color")))
+	text = text.replace("keyword_color", color_to_hex(settings.get_setting("text_editor/theme/highlighting/keyword_color")))
+	return text
+
+
+func color_to_hex(color: Color) -> String:
+	return "#%02x%02x%02x" % [int(color.r * 255), int(color.g * 255), int(color.b * 255)]
+
+
 ## Signals.
 # Called when the ImportButton is pressed.
 func _on_import_button_pressed() -> void:
@@ -164,3 +205,7 @@ func _on_visibility_changed() -> void:
 		set_process(false)
 		if is_node_ready():
 			dock_preview.set_process(false)
+
+
+func _on_property_popup_mouse_exited() -> void:
+	property_popup.visible = false

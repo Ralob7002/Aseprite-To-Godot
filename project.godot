@@ -15,6 +15,10 @@ config/tags=PackedStringArray("plugin")
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/AsepriteToGodot/plugin.cfg")
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0

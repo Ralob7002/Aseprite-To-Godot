@@ -14,7 +14,7 @@ extends Node
 @onready var up_container: HBoxContainer = %UpContainer
 @onready var animation_progress: ProgressBar = %AnimationProgress
 
-## Variables.
+## Variables. Takes for the size.
 var animation_node_is_playing: bool = false
 var auto_update_camera: bool = true
 
@@ -41,7 +41,10 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	update_animation_progress()
+	if not main_dock.get_property("DisableAnimationProgressBar"):
+		update_animation_progress()
+	else:
+		animation_progress.value = 0.0
 
 
 # Update the zoom of the PreviewCamera.

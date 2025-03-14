@@ -1,0 +1,8 @@
+Defines the loop mode for all animations.
+[p] [/p][p] [/p]
+[b]Loop None[/b]: The animation will stop on the last frame.
+[p] [/p][p] [/p]
+[b]Loop Linear[/b]: The animation will repeat once it reaches the last frame.
+[p] [/p][p] [/p]
+[b]Loop PingPong[/b]: The animation will play in reverse when it reaches the last frame, and  vice versa.
+set the animation mode ocmo 

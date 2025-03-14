@@ -11,6 +11,7 @@ enum PROPERTY_TYPE {FILE, ITEMLIST, COLOR_PICKER, CHECK_BOX}
 ## References.
 @onready var property_name: Label = $PropertyName
 @onready var property_types: Node = $PropertyTypes
+@onready var property_timer: Timer = $PropertyTimer
 
 ## Exports.
 @export var type: PROPERTY_TYPE = PROPERTY_TYPE.FILE:
@@ -32,6 +33,10 @@ enum PROPERTY_TYPE {FILE, ITEMLIST, COLOR_PICKER, CHECK_BOX}
 @export var horizontal_expand_list: bool = false
 @export var clip_text: bool = false
 @export var shrink_end: bool = true
+@export_group("Property Information")
+@export var property_title: String = ""
+@export var property_description: String = ""
+@export var popup_size: Vector2 = Vector2(100, 100)
 
 ## Variables.
 var current_type: Node
@@ -89,7 +94,7 @@ func set_reload_button(enabled: bool) -> void:
 	if enabled:
 		var reload_button: Button = Button.new()
 		add_child(reload_button)
-		move_child(reload_button, 2)
+		move_child(reload_button, 3)
 		# Set up the ReloadButton.
 		reload_button.name = "ReloadButton"
 		reload_button.icon = main_dock.get_icon("Reload")
@@ -121,3 +126,31 @@ func _on_value_changed(value: Variant) -> void:
 func _on_reload_button_pressed() -> void:
 	reload_button_pressed.emit()
 	value = null
+
+
+func _on_mouse_entered() -> void:
+	property_timer.start(0.8)
+
+
+func _on_mouse_exited() -> void:
+	if not main_dock: return
+	if not main_dock.property_popup: return
+	
+	property_timer.stop()
+	
+	await get_tree().create_timer(0.3).timeout
+	
+	var popup: PopupPanel = main_dock.property_popup
+	var mouse_position: Vector2 = get_global_mouse_position() + Vector2(get_window().position)
+	var popup_rect: Rect2 = Rect2(
+		popup.position,
+		popup.position + popup.size
+	)
+	
+	if not popup_rect.has_point(mouse_position):
+		main_dock.property_popup.visible = false
+
+
+func _on_property_timer_timeout() -> void:
+	if main_dock:
+		main_dock.open_property_popup(property_title, property_description, popup_size)

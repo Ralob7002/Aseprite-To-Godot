@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://cxl3j5ubdp7oq"]
+[gd_scene load_steps=29 format=3 uid="uid://cxl3j5ubdp7oq"]
 
 [ext_resource type="Script" uid="uid://b45kynfjesqil" path="res://addons/AsepriteToGodot/scripts/main_dock.gd" id="1_76csb"]
 [ext_resource type="Script" uid="uid://c3gotwn4e5kdc" path="res://addons/AsepriteToGodot/scripts/texture_importer.gd" id="2_xond4"]
@@ -20,6 +20,22 @@
 [ext_resource type="Script" uid="uid://b6n3wvo0y260u" path="res://addons/AsepriteToGodot/scripts/preview_input.gd" id="18_1gtmb"]
 [ext_resource type="Texture2D" uid="uid://b8kutx3ttuu31" path="res://addons/AsepriteToGodot/icons/CenterView.svg" id="19_1gtmb"]
 [ext_resource type="Texture2D" uid="uid://dhnssm0rs5w55" path="res://addons/AsepriteToGodot/icons/Lock.svg" id="20_dbnn3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0qajn"]
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqlmi"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dbnn3"]
+bg_color = Color(1, 1, 1, 0.02)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0qajn"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dbnn3"]
 
@@ -72,6 +88,83 @@ item_1/id = 1
 initial_position = 4
 transient_to_focused = true
 
+[node name="PropertyPopup" type="PopupPanel" parent="."]
+handle_input_locally = false
+size = Vector2i(600, 600)
+theme_override_styles/panel = SubResource("StyleBoxFlat_0qajn")
+
+[node name="PropertyPopupControl" type="Control" parent="PropertyPopup"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 600.0
+offset_bottom = 600.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="Panel" parent="PropertyPopup/PropertyPopupControl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Border" type="Panel" parent="PropertyPopup/PropertyPopupControl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wqlmi")
+
+[node name="Margin" type="MarginContainer" parent="PropertyPopup/PropertyPopupControl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="PropertyPopupBGContainer" type="VBoxContainer" parent="PropertyPopup/PropertyPopupControl/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TitleMargin" type="MarginContainer" parent="PropertyPopup/PropertyPopupControl/Margin/PropertyPopupBGContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="TitleBackground" type="Panel" parent="PropertyPopup/PropertyPopupControl/Margin/PropertyPopupBGContainer/TitleMargin"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dbnn3")
+
+[node name="MarginContainer" type="MarginContainer" parent="PropertyPopup/PropertyPopupControl/Margin/PropertyPopupBGContainer/TitleMargin"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 6
+
+[node name="PropertyPopupTitle" type="RichTextLabel" parent="PropertyPopup/PropertyPopupControl/Margin/PropertyPopupBGContainer/TitleMargin/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_0qajn")
+bbcode_enabled = true
+
+[node name="ContentMargin" type="MarginContainer" parent="PropertyPopup/PropertyPopupControl/Margin/PropertyPopupBGContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PropertyPopupLabel" type="RichTextLabel" parent="PropertyPopup/PropertyPopupControl/Margin/PropertyPopupBGContainer/ContentMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+bbcode_enabled = true
+scroll_active = false
+
 [node name="MainMargin" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -111,11 +204,17 @@ theme_override_constants/separation = 5
 layout_mode = 2
 main_dock = NodePath("../../../../../../..")
 extension_filters = PackedStringArray("*.json")
+property_title = "[b][color=accent_color]Property[/color] aseprite_export_json[/b]: [font_size=12][color=engine_type_color]JSON[/color][/font_size]"
+property_description = "[color=engine_type_color]JSON[/color] file generated when exporting a sprite sheet in [b]Aseprite[/b].[p] [/p][p][b]Notes[/b][/p]:[ul] The [b]JSON[/b] must be exported in [b]hash[/b] format.[/ul][ul] The [b]meta[/b] section must include [b]layers[/b] and [b]tags[/b].[/ul][ul] Item [b]Filename[/b] must follow the standard formatting: [color=keyword_color]{title} {frame}.{extension}[/color][/ul][ul] Item [b]Tagname[/b] must follow the standard formatting: [color=keyword_color]{tag}[/color][/ul]"
+popup_size = Vector2(600, 170)
 
 [node name="AnimationSpriteSheet" parent="MainMargin/MainContainer/TabContainer/Properties/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
 layout_mode = 2
 main_dock = NodePath("../../../../../../..")
 extension_filters = PackedStringArray("*.svg", "*.png", "*.jpg", "*.jpeg")
+property_title = "[b][color=accent_color]Property[/color] animation_sprite_sheet[/b]: [font_size=12][color=accent_color]Texture2D[/color][/font_size]"
+property_description = "Image generated when exporting a sprite sheet in [b]Aseprite[/b].[p] [/p][p] [/p][b]Supported extensions[/b]: [i]svg, png, jpeg, jpg[/i]"
+popup_size = Vector2(600, 100)
 
 [node name="TextureNodeType" parent="MainMargin/MainContainer/TabContainer/Properties/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
 layout_mode = 2
@@ -123,6 +222,9 @@ type = 1
 main_dock = NodePath("../../../../../../..")
 item_list = PackedStringArray("Sprite2D", "AnimatedSprite2D")
 item_list_icons = [ExtResource("8_b2c7s"), ExtResource("9_wi3qm")]
+property_title = "[b][color=accent_color]Property[/color] texture_node_type[/b]: [font_size=12][color=accent_color]Node2D[/color][/font_size]"
+property_description = "[color=#70bafa]Node2D[/color] that will display the texture of the [b]AnimationSpriteSheet[/b]."
+popup_size = Vector2(600, 65)
 
 [node name="TextureRegionMode" parent="MainMargin/MainContainer/TabContainer/Properties/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
 layout_mode = 2
@@ -130,6 +232,9 @@ type = 1
 main_dock = NodePath("../../../../../../..")
 item_list = PackedStringArray("Sprite2D Region", "AtlasTexture Region")
 item_list_icons = [ExtResource("8_b2c7s"), ExtResource("10_lesjs")]
+property_title = "[b][color=accent_color]Property[/color] texture_region_mode[/b]: [font_size=12][color=engine_type_color]Variant[/color][/font_size]"
+property_description = "Defines the mode in which the [color=#bd7ef1]AnimationPlayer[/color] will traverse the [b]AnimationSpriteSheet[/b].[p] [/p][p] [/p][b]Sprite2D Region[/b]: The region_rect of the [color=#70bafa]Sprite2D[/color] will be changed to update the animation frames.[p] [/p][p] [/p][b]AtlasTexture Region[/b]: The region of the [b]AtlasTexture[/b] will be changed to update the animation frames.color=#70bafa"
+popup_size = Vector2(600, 170)
 
 [node name="AnimationLoopMode" parent="MainMargin/MainContainer/TabContainer/Properties/PropertiesMargin/Properties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
 layout_mode = 2
@@ -137,6 +242,9 @@ type = 1
 main_dock = NodePath("../../../../../../..")
 item_list = PackedStringArray("Loop None", "Loop Linear", "Loop PingPong")
 item_list_icons = [ExtResource("11_u75ft"), ExtResource("12_2tnby"), ExtResource("13_ss501")]
+property_title = "[b][color=accent_color]Property[/color] animation_loop_mode[/b]: [font_size=12][color=engine_type_color]Variant[/color][/font_size]"
+property_description = "Defines the loop mode for all animations.[p] [/p][p] [/p][b]Loop None[/b]: The animation will stop on the last frame.[p] [/p][p] [/p][b]Loop Linear[/b]: The animation will repeat once it reaches the last frame.[p] [/p][p] [/p][b]Loop PingPong[/b]: The animation will play in reverse when it reaches the last frame, and vice versa."
+popup_size = Vector2(660, 170)
 
 [node name="Advanced" type="MarginContainer" parent="MainMargin/MainContainer/TabContainer"]
 visible = false
@@ -160,6 +268,13 @@ layout_mode = 2
 layout_mode = 2
 type = 2
 main_dock = NodePath("../../../../../../..")
+popup_size = Vector2(100, 100)
+
+[node name="DisableAnimationProgressBar" parent="MainMargin/MainContainer/TabContainer/Advanced/AdvancedPropertiesMargin/AdvancedProperties" node_paths=PackedStringArray("main_dock") instance=ExtResource("7_78w5t")]
+layout_mode = 2
+type = 3
+main_dock = NodePath("../../../../../../..")
+popup_size = Vector2(100, 100)
 
 [node name="RightContainer" type="VBoxContainer" parent="MainMargin/MainContainer"]
 custom_minimum_size = Vector2(400, 0)
@@ -217,6 +332,7 @@ use_reset_button = false
 horizontal_expand_list = true
 clip_text = true
 shrink_end = false
+popup_size = Vector2(100, 100)
 
 [node name="RightVSeparator" type="VSeparator" parent="MainMargin/MainContainer/RightContainer/UpMargin/UpContainer"]
 layout_mode = 2
@@ -300,6 +416,7 @@ icon = ExtResource("20_dbnn3")
 flat = true
 
 [connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
+[connection signal="mouse_exited" from="PropertyPopup" to="." method="_on_property_popup_mouse_exited"]
 [connection signal="value_changed" from="MainMargin/MainContainer/TabContainer/Properties/PropertiesMargin/Properties/AsepriteExportJson" to="." method="_on_aseprite_export_json_value_changed"]
 [connection signal="value_changed" from="MainMargin/MainContainer/TabContainer/Properties/PropertiesMargin/Properties/AsepriteExportJson" to="MainMargin/MainContainer/RightContainer/PreviewMargin/PreviewInput" method="_on_dependent_property_value_changed"]
 [connection signal="value_changed" from="MainMargin/MainContainer/TabContainer/Properties/PropertiesMargin/Properties/AnimationSpriteSheet" to="MainMargin/MainContainer/RightContainer/PreviewMargin/PreviewInput" method="_on_dependent_property_value_changed"]
