@@ -78,6 +78,7 @@ func is_splited_tags() -> bool:
 	var json_path: String = get_property("AsepriteExportJson")
 	if not FileAccess.file_exists(json_path): return false
 	var data: Dictionary = load(json_path).data
+	if data.meta.frameTags.is_empty(): return false
 	var tag_name: String = data.meta.frameTags[0].name
 	var layer_name: String = data.meta.layers[0].name
 	var target_frame_key: String = json_path.get_file().get_basename()

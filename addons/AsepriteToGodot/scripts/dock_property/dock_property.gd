@@ -129,16 +129,18 @@ func _on_reload_button_pressed() -> void:
 
 
 func _on_mouse_entered() -> void:
+	return # Dock property preview disabled.
 	property_timer.start(0.8)
 
 
 func _on_mouse_exited() -> void:
+	return # Dock property preview disabled.
 	if not main_dock: return
 	if not main_dock.property_popup: return
 	
 	property_timer.stop()
 	
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.5).timeout
 	
 	var popup: PopupPanel = main_dock.property_popup
 	var mouse_position: Vector2 = get_global_mouse_position() + Vector2(get_window().position)
